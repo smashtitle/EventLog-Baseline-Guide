@@ -1,6 +1,9 @@
+from pathlib import Path
+
 import streamlit as st
 import pandas as pd
 import altair as alt
+import plotly.express as px
 from st_aggrid import AgGrid, GridOptionsBuilder, JsCode
 
 def create_bar_chart(data, title):
@@ -17,46 +20,108 @@ def create_bar_chart(data, title):
     )
     return chart
 
+### Title and SelectBox
 st.set_page_config(page_title='Comparison of Baseline Guides for Event Log Audit Settings',  layout='wide')
 st.markdown("<h1 style='text-align: center;'>Comparison of Baseline Guides for Event Log Audit Settings</h1>", unsafe_allow_html=True)
-guid = st.selectbox('', ["Windows Default", "YamatoSecurity", "Microsoft", "ACSC", "AUD", "CIS"])
-st.markdown(f"<h2 style='text-align: center;'> {guid} Audit Settings</h2>", unsafe_allow_html=True)
-st.markdown(f"<p style='text-align: center;'>Please check audit setting!</p>", unsafe_allow_html=True)
-csv_file = "WELA-Audit-Result.csv"
-df = pd.read_csv(csv_file)
-columns_to_display = [0, 1, 2, 5, 6, 7]
-df = df.iloc[:, columns_to_display]
-cellStyle = JsCode(
-    r"""
-    function(cellClassParams) {
-         if (cellClassParams.data.Default == "No Auditing") {
-            return {'background-color': 'lightsalmon'}
-         } else {
-            return {'background-color': 'palegreen'}
-         }
-    }
-   """)
+selected_guide = st.selectbox('', ["Windows Default", "YamatoSecurity", "Australian Signals Directorate", "Microsoft(Server)", "Microsoft(Client)"], index=0, label_visibility="collapsed")
+data_path = Path("./data") / selected_guide.replace(" ", "_").replace("(", "_").replace(")", "")
+guide_link  = {
+    "Windows Default": "https://learn.microsoft.com/en-us/windows-server/identity/ad-ds/plan/security-best-practices/audit-policy-recommendations",
+    "YamatoSecurity": "https://github.com/Yamato-Security/EnableWindowsLogSettings",
+    "Australian Signals Directorate": "https://www.cyber.gov.au/resources-business-and-government/maintaining-devices-and-systems/system-hardening-and-administration/system-monitoring/windows-event-logging-and-forwarding",
+    "Microsoft(Server)": "https://learn.microsoft.com/en-us/windows-server/identity/ad-ds/plan/security-best-practices/audit-policy-recommendations",
+    "Microsoft(Client)": "https://learn.microsoft.com/en-us/windows-server/identity/ad-ds/plan/security-best-practices/audit-policy-recommendations",
+}
 
-grid_builder = GridOptionsBuilder.from_dataframe(df)
-grid_options = grid_builder.build()
-grid_options['defaultColDef']['cellStyle'] = cellStyle
-AgGrid(data=df, gridOptions=grid_options, allow_unsafe_jscode=True, key='grid1', editable=True)
+### Audit settings
+m1, m2, = st.columns((3, 2))
+df_audit = pd.read_csv(data_path.joinpath("WELA-Audit-Result.csv"))
+with m1:
+    st.markdown(f"<h3 style='text-align: center;'>{selected_guide} Audit Settings</h3>", unsafe_allow_html=True)
+    st.markdown(f"<p style='text-align: center;'><a href='{guide_link[selected_guide]}' target='_blank'>{guide_link[selected_guide]}</a></p>", unsafe_allow_html=True)
+    columns_to_display = [0, 1, 2, 6, 5, 7, 8]
+    df = df_audit.iloc[:, columns_to_display]
+    cellStyle = JsCode(
+        r"""
+        function(cellClassParams) {
+            const defaultSetting = cellClassParams.data.DefaultSetting;
+            const recommended = cellClassParams.data.RecommendedSetting;
+        
+            if (defaultSetting === "No Auditing") {
+                if (
+                    recommended === null ||
+                    recommended === undefined ||
+                    recommended === "No Auditing" ||
+                    recommended === ""
+                ) {
+                    return { 'background-color': 'lightgray' };
+                } else {
+                    return { 'background-color': 'yellow' };
+                }
+            } else {
+                return { 'background-color': 'palegreen' };
+            }
+        }
+       """)
+
+    gb = GridOptionsBuilder.from_dataframe(df)
+    gb.configure_column("Category", pinned="left", width=150)
+    gb.configure_column("SubCategory", pinned="left", width=150)
+    go = gb.build()
+    go['defaultColDef']['cellStyle'] = cellStyle
+    AgGrid(data=df, gridOptions=go, allow_unsafe_jscode=True, key='grid1', editable=True)
+
+with m2:
+    st.markdown(f"<h3 style='text-align: center;'>Log File Size Settings</h3>", unsafe_allow_html=True)
+    msg = ""
+    if selected_guide == "YamatoSecurity" or selected_guide == "Australian Signals Directorate":
+        msg = f"The following table shows the recommended log size based on {selected_guide}."
+    else:
+        msg = f"{selected_guide} does not include any recommended settings regarding log size."
+    st.markdown(f"<p style='text-align: center;'>{msg}</p>", unsafe_allow_html=True)
+    csv_file = data_path.joinpath("WELA-FileSize-Result.csv")
+    df = pd.read_csv(csv_file)
+    columns_to_display = [0, 4, 3]
+    df = df.iloc[:, columns_to_display]
+    cellStyle = JsCode(
+        r"""
+        function(cellClassParams) {
+             if (cellClassParams.data.Recommended === null ) {
+                return {'background-color': `lightgray`}
+             } else {
+                return {'background-color': 'yellow'}
+             }
+        }
+       """)
+
+    gb = GridOptionsBuilder.from_dataframe(df)
+    go = gb.build()
+    go['defaultColDef']['cellStyle'] = cellStyle
+    AgGrid(df, gridOptions=go, allow_unsafe_jscode=True, key="log_file_size", editable=True)
+
+
+### Sigma Rule Statistics
 st.markdown("<hr>", unsafe_allow_html=True)
-st.markdown("<h2 style='text-align: center;'>Statistics on Usable and Unusable Sigma Rule(hayabusa rule)</h2>", unsafe_allow_html=True)
-st.markdown("<p style='text-align: center;'>The following graph shows the detectability of Sigma rules based on the selected Audit Guide.</p>", unsafe_allow_html=True)
+st.markdown("<h3 style='text-align: center;'>Statistics on Usable and Unusable Sigma Rule(hayabusa rule)</h2>", unsafe_allow_html=True)
+
+df_usable = pd.read_csv(data_path.joinpath("UsableRules.csv"))
+df_unusable = pd.read_csv(data_path.joinpath("UnusableRules.csv"))
+
 m1, m2, = st.columns(2)
 level_order = ["critical", "high", "medium", "low", "informational"]
 with m1:
-    csv_file = "UsableRules.csv"
-    df = pd.read_csv(csv_file)
-    df["level"] = pd.Categorical(df["level"], categories=level_order, ordered=True)
-    df = df.sort_values("level")
-    data = df["level"].value_counts().reindex(level_order).reset_index()
+    df_usable["level"] = pd.Categorical(df_usable["level"], categories=level_order, ordered=True)
+    df_usable.sort_values("level", inplace=True)
+    data = df_usable["level"].value_counts().reindex(level_order).reset_index()
     data.columns = ["Level", "Value"]
     total = data["Value"].sum()
-    st.markdown(f"<h3 style='text-align: center;'>Usable Rules (Total: {total})</h3>", unsafe_allow_html=True)
+
+    ## Bar chart
+    st.markdown(f"<h4 style='text-align: center;'>Usable Rules Group by Level (Total: {total})</h4>", unsafe_allow_html=True)
     st.altair_chart(create_bar_chart(data, ""), use_container_width=True)
-    st.markdown(f"<h3 style='text-align: center;'>Usable Rules List (Total: {total})</h3>", unsafe_allow_html=True)
+
+    ## List
+    st.markdown(f"<h4 style='text-align: center;'>Usable Rules List (Total: {total})</h4>", unsafe_allow_html=True)
     cellStyle_unusable = JsCode(
         r"""
         function(cellClassParams) {
@@ -64,22 +129,26 @@ with m1:
         }
         """
     )
-    grid_builder_unusable = GridOptionsBuilder.from_dataframe(df)
-    grid_options_unusable = grid_builder_unusable.build()
-    grid_options_unusable['defaultColDef']['cellStyle'] = cellStyle_unusable
-    AgGrid(df, gridOptions=grid_options_unusable, allow_unsafe_jscode=True, key='usable_rules', editable=True)
+    gb = GridOptionsBuilder.from_dataframe(df_usable)
+    gb.configure_column("title", pinned="left", width=150)
+    go = gb.build()
+    go['defaultColDef']['cellStyle'] = cellStyle_unusable
+    AgGrid(df_usable, gridOptions=go, allow_unsafe_jscode=True, key='usable_rules', editable=True)
+
 
 with m2:
-    csv_file = "UnusableRules.csv"
-    df = pd.read_csv(csv_file)
-    df["level"] = pd.Categorical(df["level"], categories=level_order, ordered=True)
-    df = df.sort_values("level")
-    data = df["level"].value_counts().reindex(level_order).reset_index()
+    df_unusable["level"] = pd.Categorical(df_unusable["level"], categories=level_order, ordered=True)
+    df_unusable.sort_values("level", inplace=True)
+    data = df_unusable["level"].value_counts().reindex(level_order).reset_index()
     data.columns = ["Level", "Value"]
     total = data["Value"].sum()
-    st.markdown(f"<h3 style='text-align: center;'>Unusable Rules (Total: {total})</h3>", unsafe_allow_html=True)
+
+    ## Bar chart
+    st.markdown(f"<h4 style='text-align: center;'>Unusable Rules Group by Level (Total: {total})</h4>", unsafe_allow_html=True)
     st.altair_chart(create_bar_chart(data, ""), use_container_width=True)
-    st.markdown(f"<h3 style='text-align: center;'>Unusable Rules List (Total: {total})</h3>", unsafe_allow_html=True)
+
+    ## List
+    st.markdown(f"<h4 style='text-align: center;'>Unusable Rules List (Total: {total})</h4>", unsafe_allow_html=True)
     cellStyle_unusable = JsCode(
         r"""
         function(cellClassParams) {
@@ -87,35 +156,57 @@ with m2:
         }
         """
     )
+    gb = GridOptionsBuilder.from_dataframe(df_unusable)
+    gb.configure_column("title", pinned="left", width=150)
+    go = gb.build()
+    go['defaultColDef']['cellStyle'] = cellStyle_unusable
+    AgGrid(df_unusable, gridOptions=go, allow_unsafe_jscode=True, key='un_usable_rules', editable=True)
 
-    grid_builder_unusable = GridOptionsBuilder.from_dataframe(df)
-    grid_options_unusable = grid_builder_unusable.build()
-    grid_options_unusable['defaultColDef']['cellStyle'] = cellStyle_unusable
-    AgGrid(df, gridOptions=grid_options_unusable, allow_unsafe_jscode=True, key='un_usable_rules', editable=True)
 
-st.markdown("<hr>", unsafe_allow_html=True)
-m1, m2, m3 = st.columns((1,3,1))
+m1, m2, = st.columns((1, 1))
+with m1:
+    columns_to_display = [0, 1, 2]
+    df_enabled = df_audit[df_audit["Enabled"] == True]
+    df_enabled = df_enabled.iloc[:, columns_to_display]
+    df_enabled = df_enabled.sort_values(by="RuleCount", ascending=False)
+    df_top10 = df_enabled.head(10)
+    data = df_top10
+    fig = px.pie(data, names="Category", values="RuleCount", title="", color_discrete_sequence=px.colors.qualitative.D3)
+    st.markdown(f"<h4 style='text-align: center;'>Usable Rules Group by Audit Category Top 10</h4>", unsafe_allow_html=True)
+    st.plotly_chart(fig, use_container_width=True, key="usable_category_top10")
+
 with m2:
-    st.markdown("<h2 style='text-align: center;'>Event Log File Size Settings</h2>", unsafe_allow_html=True)
-    st.markdown(
-        "<p style='text-align: center;'>The following table shows the... </p>",
-        unsafe_allow_html=True)
-    csv_file = "WELA-FileSize-Result.csv"
-    df = pd.read_csv(csv_file)
-    columns_to_display = [0, 3, 4, 6, 7]
-    df = df.iloc[:, columns_to_display]
-    cellStyle = JsCode(
-        r"""
-        function(cellClassParams) {
-             if (cellClassParams.data.CorrectSetting == "N") {
-                return {'background-color': 'lightsalmon'}
-             } else {
-                return {'background-color': 'palegreen'}
-             }
-        }
-       """)
+    columns_to_display = [0, 1, 2]
+    df_disabled = df_audit[df_audit["Enabled"] == False]
+    df_disabled = df_disabled.iloc[:, columns_to_display]
+    df_disabled = df_disabled.sort_values(by="RuleCount", ascending=False)
+    df_top10 = df_disabled.head(10)
+    data = df_top10
+    fig = px.pie(data, names="Category", values="RuleCount", title="", color_discrete_sequence=px.colors.sequential.Sunset)
+    st.markdown(f"<h4 style='text-align: center;'>Unusable Rules Group by Audit Category Top 10</h4>", unsafe_allow_html=True)
+    st.plotly_chart(fig, use_container_width=True, key="unusable_category_top10")
 
-    grid_builder_unusable = GridOptionsBuilder.from_dataframe(df)
-    grid_options_unusable = grid_builder_unusable.build()
-    grid_options_unusable['defaultColDef']['cellStyle'] = cellStyle
-    AgGrid(df, gridOptions=grid_options_unusable, allow_unsafe_jscode=True, key="log_file_size", editable=True)
+m1, m2, m3, m4 = st.columns(4)
+with m1:
+    data = df_usable["service"].dropna()
+    fig = px.pie(data, names="service", title="", color_discrete_sequence=px.colors.qualitative.D3)
+    st.markdown(f"<h4 style='text-align: center;'>Usable Sigma Service</h4>", unsafe_allow_html=True)
+    st.plotly_chart(fig, use_container_width=True, key="usable_service")
+
+with m2:
+    data = df_usable["category"].dropna()
+    fig = px.pie(data, names="category", title="", color_discrete_sequence=px.colors.qualitative.D3)
+    st.markdown(f"<h4 style='text-align: center;'>Usable Sigma Category</h4>", unsafe_allow_html=True)
+    st.plotly_chart(fig, use_container_width=True, key="usable_category")
+
+with m3:
+    data = df_unusable["service"].dropna()
+    fig = px.pie(data, names="service", title="", color_discrete_sequence=px.colors.sequential.Sunset)
+    st.markdown(f"<h4 style='text-align: center;'>Unusable Sigma Service</h4>", unsafe_allow_html=True)
+    st.plotly_chart(fig, use_container_width=True, key="unusable_service")
+
+with m4:
+    data = df_unusable["category"].dropna()
+    fig = px.pie(data, names="category", title="", color_discrete_sequence=px.colors.sequential.Sunset)
+    st.markdown(f"<h4 style='text-align: center;'>Unusable Sigma Category</h4>", unsafe_allow_html=True)
+    st.plotly_chart(fig, use_container_width=True, key="unusable_cateogry")
