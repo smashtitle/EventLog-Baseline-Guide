@@ -172,10 +172,19 @@ with m1:
     df_enabled = df_enabled.iloc[:, columns_to_display]
     df_enabled = df_enabled.sort_values(by="RuleCount", ascending=False)
     df_top10 = df_enabled.head(10)
+    df_top10.loc[:, 'SubCategory'] = df_top10['SubCategory'].fillna(df_top10['Category'])
     data = df_top10
-    fig = px.pie(data, names="Category", values="RuleCount", title="", color_discrete_sequence=px.colors.qualitative.D3)
     st.markdown(f"<h4 style='text-align: center;'>Usable Rules Group by Audit Category Top 10</h4>", unsafe_allow_html=True)
-    st.plotly_chart(fig, use_container_width=True, key="usable_category_top10")
+    chart = alt.Chart(data).mark_bar().encode(
+        x=alt.X("SubCategory", sort="y", axis=alt.Axis(labelAngle=-45, labelOverlap=False)),
+        y=alt.Y("RuleCount")
+    ).properties(
+        width=300,
+        height=400,
+        title=""
+    )
+    st.altair_chart(chart, use_container_width=True)
+
 
 with m2:
     columns_to_display = [0, 1, 2]
@@ -183,10 +192,19 @@ with m2:
     df_disabled = df_disabled.iloc[:, columns_to_display]
     df_disabled = df_disabled.sort_values(by="RuleCount", ascending=False)
     df_top10 = df_disabled.head(10)
+    df_top10.loc[:, 'SubCategory'] = df_top10['SubCategory'].fillna(df_top10['Category'])
     data = df_top10
-    fig = px.pie(data, names="Category", values="RuleCount", title="", color_discrete_sequence=px.colors.sequential.Sunset)
     st.markdown(f"<h4 style='text-align: center;'>Unusable Rules Group by Audit Category Top 10</h4>", unsafe_allow_html=True)
-    st.plotly_chart(fig, use_container_width=True, key="unusable_category_top10")
+    chart = alt.Chart(data).mark_bar().encode(
+        x=alt.X("SubCategory", sort="y", axis=alt.Axis(labelAngle=-45, labelOverlap=False)),
+        y=alt.Y("RuleCount"),
+        color=alt.value("#D2B48C")
+    ).properties(
+        width=300,
+        height=400,
+        title=""
+    )
+    st.altair_chart(chart, use_container_width=True)
 st.markdown("<br><br>", unsafe_allow_html=True)
 
 m1, m2, m3, m4 = st.columns(4)
