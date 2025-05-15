@@ -176,7 +176,7 @@ with m1:
     df_top10 = df_enabled.head(10)
     df_top10.loc[:, 'SubCategory'] = df_top10['SubCategory'].fillna(df_top10['Category'])
     data = df_top10
-    st.markdown(f"<h4 style='text-align: center;'>Usable Rules Group by Audit Category Top 10</h4>", unsafe_allow_html=True)
+    st.markdown(f"<h4 style='text-align: center;'>Usable Rules Group by Audit Category</h4>", unsafe_allow_html=True)
     chart = alt.Chart(data).mark_bar().encode(
         x=alt.X("SubCategory", sort="y", axis=alt.Axis(labelAngle=-45, labelOverlap=False)),
         y=alt.Y("RuleCount")
@@ -197,7 +197,7 @@ with m2:
     df_top10 = df_disabled.head(10)
     df_top10.loc[:, 'SubCategory'] = df_top10['SubCategory'].fillna(df_top10['Category'])
     data = df_top10
-    st.markdown(f"<h4 style='text-align: center;'>Unusable Rules Group by Audit Category Top 10</h4>", unsafe_allow_html=True)
+    st.markdown(f"<h4 style='text-align: center;'>Unusable Rules Group by Audit Category</h4>", unsafe_allow_html=True)
     chart = alt.Chart(data).mark_bar().encode(
         x=alt.X("SubCategory", sort="y", axis=alt.Axis(labelAngle=-45, labelOverlap=False)),
         y=alt.Y("RuleCount"),
@@ -210,31 +210,71 @@ with m2:
     st.altair_chart(chart, use_container_width=True)
 st.markdown("<br>", unsafe_allow_html=True)
 
-m1, m2, m3, m4 = st.columns(4)
+m1, m2 = st.columns(2)
 with m1:
     st.markdown("<hr>", unsafe_allow_html=True)
     data = df_usable["service"].dropna()
-    fig = px.pie(data, names="service", title="", color_discrete_sequence=px.colors.qualitative.D3)
-    st.markdown(f"<h4 style='text-align: center;'>Usable Sigma Service</h4>", unsafe_allow_html=True)
-    st.plotly_chart(fig, use_container_width=True, key="usable_service")
+    st.markdown(f"<h4 style='text-align: center;'>Unusable Rules Group by Sigma Service</h4>", unsafe_allow_html=True)
+    data = data.value_counts().head(10).reset_index()
+    data.columns = ["Service", "Count"]
+    chart = alt.Chart(data).mark_bar().encode(
+        x=alt.X("Service", sort="y", axis=alt.Axis(labelAngle=-45, labelOverlap=False)),
+        y=alt.Y("Count")
+    ).properties(
+        width=600,
+        height=400,
+        title=""
+    )
+    st.altair_chart(chart, use_container_width=True)
 
 with m2:
     st.markdown("<hr>", unsafe_allow_html=True)
-    data = df_usable["category"].dropna()
-    fig = px.pie(data, names="category", title="", color_discrete_sequence=px.colors.qualitative.D3)
-    st.markdown(f"<h4 style='text-align: center;'>Usable Sigma Category</h4>", unsafe_allow_html=True)
-    st.plotly_chart(fig, use_container_width=True, key="usable_category")
-
-with m3:
-    st.markdown("<hr>", unsafe_allow_html=True)
     data = df_unusable["service"].dropna()
-    fig = px.pie(data, names="service", title="", color_discrete_sequence=px.colors.sequential.Sunset)
-    st.markdown(f"<h4 style='text-align: center;'>Unusable Sigma Service</h4>", unsafe_allow_html=True)
-    st.plotly_chart(fig, use_container_width=True, key="unusable_service")
+    st.markdown(f"<h4 style='text-align: center;'>Unusable Rules Group by Sigma Service</h4>", unsafe_allow_html=True)
+    data = data.value_counts().head(10).reset_index()
+    data.columns = ["Category", "Count"]
+    chart = alt.Chart(data).mark_bar().encode(
+        x=alt.X("Category", sort="y", axis=alt.Axis(labelAngle=-45, labelOverlap=False)),
+        y=alt.Y("Count"),
+        color=alt.value("#D2B48C")
+    ).properties(
+        width=600,
+        height=400,
+        title=""
+    )
+    st.altair_chart(chart, use_container_width=True)
 
-with m4:
+
+m1, m2 = st.columns(2)
+with m1:
+    st.markdown("<hr>", unsafe_allow_html=True)
+    data = df_usable["category"].dropna()
+    st.markdown(f"<h4 style='text-align: center;'>Usable Sigma Category</h4>", unsafe_allow_html=True)
+    data = data.value_counts().head(10).reset_index()
+    data.columns = ["Service", "Count"]
+    chart = alt.Chart(data).mark_bar().encode(
+        x=alt.X("Service", sort="y", axis=alt.Axis(labelAngle=-45, labelOverlap=False)),
+        y=alt.Y("Count")
+    ).properties(
+        width=600,
+        height=400,
+        title=""
+    )
+    st.altair_chart(chart, use_container_width=True)
+
+with m2:
     st.markdown("<hr>", unsafe_allow_html=True)
     data = df_unusable["category"].dropna()
-    fig = px.pie(data, names="category", title="", color_discrete_sequence=px.colors.sequential.Sunset)
     st.markdown(f"<h4 style='text-align: center;'>Unusable Sigma Category</h4>", unsafe_allow_html=True)
-    st.plotly_chart(fig, use_container_width=True, key="unusable_cateogry")
+    data = data.value_counts().head(10).reset_index()
+    data.columns = ["Category", "Count"]
+    chart = alt.Chart(data).mark_bar().encode(
+        x=alt.X("Category", sort="y", axis=alt.Axis(labelAngle=-45, labelOverlap=False)),
+        y=alt.Y("Count"),
+        color=alt.value("#D2B48C")
+    ).properties(
+        width=600,
+        height=400,
+        title=""
+    )
+    st.altair_chart(chart, use_container_width=True)
