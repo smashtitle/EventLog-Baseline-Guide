@@ -33,6 +33,7 @@ guide_link  = {
     "Microsoft(Server)": "https://learn.microsoft.com/en-us/windows-server/identity/ad-ds/plan/security-best-practices/audit-policy-recommendations",
     "Microsoft(Client)": "https://learn.microsoft.com/en-us/windows-server/identity/ad-ds/plan/security-best-practices/audit-policy-recommendations",
 }
+st.markdown("<br>", unsafe_allow_html=True)
 
 ### Audit settings
 m1, m2, = st.columns((3, 2))
@@ -99,7 +100,7 @@ with m2:
     go = gb.build()
     go['defaultColDef']['cellStyle'] = cellStyle
     AgGrid(df, gridOptions=go, allow_unsafe_jscode=True, key="log_file_size", editable=True)
-
+st.markdown("<br><br>", unsafe_allow_html=True)
 
 ### Sigma Rule Statistics
 st.markdown("<hr>", unsafe_allow_html=True)
@@ -162,7 +163,7 @@ with m2:
     go = gb.build()
     go['defaultColDef']['cellStyle'] = cellStyle_unusable
     AgGrid(df_unusable, gridOptions=go, allow_unsafe_jscode=True, key='un_usable_rules', editable=True)
-
+st.markdown("<br><br>", unsafe_allow_html=True)
 
 m1, m2, = st.columns((1, 1))
 with m1:
@@ -186,6 +187,7 @@ with m2:
     fig = px.pie(data, names="Category", values="RuleCount", title="", color_discrete_sequence=px.colors.sequential.Sunset)
     st.markdown(f"<h4 style='text-align: center;'>Unusable Rules Group by Audit Category Top 10</h4>", unsafe_allow_html=True)
     st.plotly_chart(fig, use_container_width=True, key="unusable_category_top10")
+st.markdown("<br><br>", unsafe_allow_html=True)
 
 m1, m2, m3, m4 = st.columns(4)
 with m1:
