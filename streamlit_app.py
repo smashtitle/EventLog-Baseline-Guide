@@ -102,7 +102,6 @@ with m2:
     go = gb.build()
     go['defaultColDef']['cellStyle'] = cellStyle
     AgGrid(df, gridOptions=go, allow_unsafe_jscode=True, key="log_file_size", editable=True)
-st.markdown("<br><br>", unsafe_allow_html=True)
 
 ### Sigma Rule Statistics
 st.markdown("<hr>", unsafe_allow_html=True)
@@ -123,7 +122,7 @@ with m1:
     ## Bar chart
     st.markdown(f"<h4 style='text-align: center;'>Usable Rules Group by Level (Total: {total})</h4>", unsafe_allow_html=True)
     st.altair_chart(create_bar_chart(data, ""), use_container_width=True)
-    st.markdown("<br><br>", unsafe_allow_html=True)
+    st.markdown("<hr>", unsafe_allow_html=True)
     ## List
     st.markdown(f"<h4 style='text-align: center;'>Usable Rules List (Total: {total})</h4>", unsafe_allow_html=True)
     cellStyle_unusable = JsCode(
@@ -150,7 +149,7 @@ with m2:
     ## Bar chart
     st.markdown(f"<h4 style='text-align: center;'>Unusable Rules Group by Level (Total: {total})</h4>", unsafe_allow_html=True)
     st.altair_chart(create_bar_chart(data, ""), use_container_width=True)
-    st.markdown("<br><br>", unsafe_allow_html=True)
+    st.markdown("<hr>", unsafe_allow_html=True)
     ## List
     st.markdown(f"<h4 style='text-align: center;'>Unusable Rules List (Total: {total})</h4>", unsafe_allow_html=True)
     cellStyle_unusable = JsCode(
@@ -165,11 +164,11 @@ with m2:
     go = gb.build()
     go['defaultColDef']['cellStyle'] = cellStyle_unusable
     AgGrid(df_unusable, gridOptions=go, allow_unsafe_jscode=True, key='un_usable_rules', editable=True)
-st.markdown("<br><br>", unsafe_allow_html=True)
-st.markdown("<hr>", unsafe_allow_html=True)
+st.markdown("<br>", unsafe_allow_html=True)
 
 m1, m2, = st.columns((1, 1))
 with m1:
+    st.markdown("<hr>", unsafe_allow_html=True)
     columns_to_display = [0, 1, 2]
     df_enabled = df_audit[df_audit["Enabled"] == True]
     df_enabled = df_enabled.iloc[:, columns_to_display]
@@ -190,6 +189,7 @@ with m1:
 
 
 with m2:
+    st.markdown("<hr>", unsafe_allow_html=True)
     columns_to_display = [0, 1, 2]
     df_disabled = df_audit[df_audit["Enabled"] == False]
     df_disabled = df_disabled.iloc[:, columns_to_display]
@@ -208,29 +208,32 @@ with m2:
         title=""
     )
     st.altair_chart(chart, use_container_width=True)
-st.markdown("<br><br>", unsafe_allow_html=True)
-st.markdown("<hr>", unsafe_allow_html=True)
+st.markdown("<br>", unsafe_allow_html=True)
 
 m1, m2, m3, m4 = st.columns(4)
 with m1:
+    st.markdown("<hr>", unsafe_allow_html=True)
     data = df_usable["service"].dropna()
     fig = px.pie(data, names="service", title="", color_discrete_sequence=px.colors.qualitative.D3)
     st.markdown(f"<h4 style='text-align: center;'>Usable Sigma Service</h4>", unsafe_allow_html=True)
     st.plotly_chart(fig, use_container_width=True, key="usable_service")
 
 with m2:
+    st.markdown("<hr>", unsafe_allow_html=True)
     data = df_usable["category"].dropna()
     fig = px.pie(data, names="category", title="", color_discrete_sequence=px.colors.qualitative.D3)
     st.markdown(f"<h4 style='text-align: center;'>Usable Sigma Category</h4>", unsafe_allow_html=True)
     st.plotly_chart(fig, use_container_width=True, key="usable_category")
 
 with m3:
+    st.markdown("<hr>", unsafe_allow_html=True)
     data = df_unusable["service"].dropna()
     fig = px.pie(data, names="service", title="", color_discrete_sequence=px.colors.sequential.Sunset)
     st.markdown(f"<h4 style='text-align: center;'>Unusable Sigma Service</h4>", unsafe_allow_html=True)
     st.plotly_chart(fig, use_container_width=True, key="unusable_service")
 
 with m4:
+    st.markdown("<hr>", unsafe_allow_html=True)
     data = df_unusable["category"].dropna()
     fig = px.pie(data, names="category", title="", color_discrete_sequence=px.colors.sequential.Sunset)
     st.markdown(f"<h4 style='text-align: center;'>Unusable Sigma Category</h4>", unsafe_allow_html=True)
