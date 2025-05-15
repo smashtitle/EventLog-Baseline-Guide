@@ -23,7 +23,7 @@ def create_bar_chart(data, title):
 ### Title and SelectBox
 st.set_page_config(page_title='Comparison of Baseline Guides for Event Log Audit Settings',  layout='wide')
 st.markdown("<h1 style='text-align: center;'>Comparison of Baseline Guides for Event Log Audit Settings</h1>", unsafe_allow_html=True)
-st.markdown("<h2 style='text-align: center;'>A security-driven approach to configuring Windows event logs</h2>", unsafe_allow_html=True)
+st.markdown("<h3 style='text-align: center;'>A security-driven approach to configuring Windows event logs</h3>", unsafe_allow_html=True)
 selected_guide = st.selectbox('', ["Windows Default", "YamatoSecurity", "Australian Signals Directorate", "Microsoft(Server)", "Microsoft(Client)"], index=0, label_visibility="collapsed")
 data_path = Path("./data") / selected_guide.replace(" ", "_").replace("(", "_").replace(")", "")
 guide_link  = {
