@@ -43,8 +43,9 @@ df_audit = pd.read_csv(data_path.joinpath("WELA-Audit-Result.csv"))
 with m1:
     st.markdown(f"<h3 style='text-align: center;'>{selected_guide} Audit Settings</h3>", unsafe_allow_html=True)
     st.markdown(f"<p style='text-align: center;'><a href='{guide_link[selected_guide]}' target='_blank'>{guide_link[selected_guide]}</a></p>", unsafe_allow_html=True)
-    columns_to_display = [0, 1, 2, 6, 5, 7, 8]
-    df = df_audit.iloc[:, columns_to_display]
+    columns_to_display = [0, 1, 2, 5, 6, 7, 8]
+    df = df_audit.rename(columns={"CurrentSetting": "DefaultSetting"}).iloc[:, columns_to_display]
+
     cellStyle = JsCode(
         r"""
         function(cellClassParams) {
@@ -85,7 +86,7 @@ with m2:
     st.markdown(f"<p style='text-align: center;'>{msg}</p>", unsafe_allow_html=True)
     csv_file = data_path.joinpath("WELA-FileSize-Result.csv")
     df = pd.read_csv(csv_file)
-    columns_to_display = [0, 4, 3]
+    columns_to_display = [0, 3, 4]
     df = df.iloc[:, columns_to_display]
     cellStyle = JsCode(
         r"""
@@ -170,7 +171,7 @@ m1, m2, = st.columns((1, 1))
 with m1:
     st.markdown("<hr>", unsafe_allow_html=True)
     columns_to_display = [0, 1, 2]
-    df_enabled = df_audit[df_audit["Enabled"] == True]
+    df_enabled = df_audit[(df_audit["CurrentSetting"] == "Enabled") | (df_audit["CurrentSetting"] == "Success") | (df_audit["CurrentSetting"] == "Success and Failure")]
     df_enabled = df_enabled.iloc[:, columns_to_display]
     df_enabled = df_enabled.sort_values(by="RuleCount", ascending=False)
     df_top10 = df_enabled.head(10)
@@ -191,7 +192,7 @@ with m1:
 with m2:
     st.markdown("<hr>", unsafe_allow_html=True)
     columns_to_display = [0, 1, 2]
-    df_disabled = df_audit[df_audit["Enabled"] == False]
+    df_disabled = df_audit[df_audit["CurrentSetting"] == "No Auditing"]
     df_disabled = df_disabled.iloc[:, columns_to_display]
     df_disabled = df_disabled.sort_values(by="RuleCount", ascending=False)
     df_top10 = df_disabled.head(10)
