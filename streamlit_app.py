@@ -104,7 +104,7 @@ with m2:
     )
 
     st.markdown(f"<h3 style='text-align: center;'>Legend</h3>", unsafe_allow_html=True)
-    st.markdown("<p style='text-align: center;'>The cell colors represent the following states respectively.</p>", unsafe_allow_html=True)
+    st.markdown("<p style='text-align: center;'>The cell colors represent the following states.</p>", unsafe_allow_html=True)
     gb = GridOptionsBuilder.from_dataframe(df_legend)
     gb.configure_column("Color", cellStyle=legend_cellStyle)
     go = gb.build()
