@@ -38,11 +38,11 @@ guide_link  = {
 }
 
 ### Audit settings
-_,m,_ = st.columns((2,10,2))
+_,m1,m2 = st.columns((2,7,3))
 df_audit = pd.read_csv(data_path.joinpath("WELA-Audit-Result.csv"))
 default_audit = Path("./data/Windows_Default")
 df_audit_default = pd.read_csv(default_audit.joinpath("WELA-Audit-Result.csv"))
-with m:
+with m1:
     st.markdown(f"<h3 style='text-align: center;'>{selected_guide} Audit Settings</h3>", unsafe_allow_html=True)
     st.markdown(f"<p style='text-align: center;'><a href='{guide_link[selected_guide]}' target='_blank'>{guide_link[selected_guide]}</a></p>", unsafe_allow_html=True)
     df_combined = pd.concat([df_audit, df_audit_default], axis=1)
@@ -78,6 +78,37 @@ with m:
     go = gb.build()
     go['defaultColDef']['cellStyle'] = cellStyle
     AgGrid(data=df, gridOptions=go, allow_unsafe_jscode=True, key='grid1', editable=True)
+
+with m2:
+    legend_data = [
+        {"Color": "yellow", "Description": "Change required"},
+        {"Color": "palegreen", "Description": "No change needed. Default setting is acceptable"},
+        {"Color": "lightgray", "Description": "No change needed. No auditing or no recommended setting"},
+    ]
+    # 判例（Legend）用DataFrameの作成
+    df_legend = pd.DataFrame(legend_data)
+
+    # 判例の色分け表示用cellStyle
+    legend_cellStyle = JsCode(
+        r'''
+        function(cellClassParams) {
+            if (cellClassParams.value === "lightgray") {
+                return { 'background-color': 'lightgray' };
+            } else if (cellClassParams.value === "yellow") {
+                return { 'background-color': 'yellow' };
+            } else if (cellClassParams.value === "palegreen") {
+                return { 'background-color': 'palegreen' };
+            }
+        }
+        '''
+    )
+
+    st.markdown(f"<h3 style='text-align: center;'>Legend</h3>", unsafe_allow_html=True)
+    st.markdown("<p style='text-align: center;'>The cell colors represent the following states respectively.</p>", unsafe_allow_html=True)
+    gb = GridOptionsBuilder.from_dataframe(df_legend)
+    gb.configure_column("Color", cellStyle=legend_cellStyle)
+    go = gb.build()
+    AgGrid(df_legend, gridOptions=go, allow_unsafe_jscode=True, key='legend', editable=False)
 
 _,m,_ = st.columns((2,3,2))
 with m:
@@ -283,3 +314,4 @@ with m2:
         title=""
     )
     st.altair_chart(chart, use_container_width=True)
+
