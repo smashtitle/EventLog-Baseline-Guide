@@ -38,46 +38,73 @@ guide_link  = {
 }
 
 ### Audit settings
-_,m1,m2 = st.columns((2,7,3))
 df_audit = pd.read_csv(data_path.joinpath("WELA-Audit-Result.csv"))
 default_audit = Path("./data/Windows_Default")
 df_audit_default = pd.read_csv(default_audit.joinpath("WELA-Audit-Result.csv"))
-with m1:
-    st.markdown(f"<h3 style='text-align: center;'>{selected_guide} Audit Settings</h3>", unsafe_allow_html=True)
-    st.markdown(f"<p style='text-align: center;'><a href='{guide_link[selected_guide]}' target='_blank'>{guide_link[selected_guide]}</a></p>", unsafe_allow_html=True)
-    df_combined = pd.concat([df_audit, df_audit_default], axis=1)
-    columns_to_display = [0, 1, 2, 14, 6, 7, 8]
-    df = df_combined.rename(columns={"CurrentSetting": "DefaultSetting"}).iloc[:, columns_to_display]
+st.markdown(f"<h3 style='text-align: center;'>{selected_guide} Audit Settings</h3>", unsafe_allow_html=True)
+st.markdown(f"<p style='text-align: center;'><a href='{guide_link[selected_guide]}' target='_blank'>{guide_link[selected_guide]}</a></p>", unsafe_allow_html=True)
+df_combined = pd.concat([df_audit, df_audit_default], axis=1)
+columns_to_display = [0, 1, 2, 14, 6, 7, 8]
+df = df_combined.rename(columns={"CurrentSetting": "DefaultSetting"}).iloc[:, columns_to_display]
 
+cellStyle = JsCode(
+    r"""
+    function(cellClassParams) {
+        const defaultSetting = cellClassParams.data.DefaultSetting;
+        const recommended = cellClassParams.data.RecommendedSetting;
+    
+        if (defaultSetting === "No Auditing") {
+            if (
+                recommended === null ||
+                recommended === undefined ||
+                recommended === "No Auditing" ||
+                recommended === ""
+            ) {
+                return { 'background-color': 'lightgray' };
+            } else {
+                return { 'background-color': 'yellow' };
+            }
+        } else {
+            return { 'background-color': 'palegreen' };
+        }
+    }
+   """)
+
+gb = GridOptionsBuilder.from_dataframe(df)
+gb.configure_column("Category", pinned="left", width=150)
+gb.configure_column("SubCategory", pinned="left", width=150)
+go = gb.build()
+go['defaultColDef']['cellStyle'] = cellStyle
+AgGrid(data=df, gridOptions=go, allow_unsafe_jscode=True, key='grid1', editable=True)
+
+m1,m2 = st.columns((8,3))
+with m1:
+    st.markdown(f"<h3 style='text-align: center;'>Log File Size Settings</h3>", unsafe_allow_html=True)
+    msg = ""
+    if selected_guide == "YamatoSecurity" or selected_guide == "Australian Signals Directorate":
+        msg = f"The following table shows the recommended log size based on {selected_guide}."
+    else:
+        msg = f"{selected_guide} does not include any recommended settings regarding log size."
+    st.markdown(f"<p style='text-align: center;'>{msg}</p>", unsafe_allow_html=True)
+    csv_file = data_path.joinpath("WELA-FileSize-Result.csv")
+    df = pd.read_csv(csv_file)
+    columns_to_display = [0, 3, 4]
+    df = df.iloc[:, columns_to_display]
     cellStyle = JsCode(
         r"""
         function(cellClassParams) {
-            const defaultSetting = cellClassParams.data.DefaultSetting;
-            const recommended = cellClassParams.data.RecommendedSetting;
-        
-            if (defaultSetting === "No Auditing") {
-                if (
-                    recommended === null ||
-                    recommended === undefined ||
-                    recommended === "No Auditing" ||
-                    recommended === ""
-                ) {
-                    return { 'background-color': 'lightgray' };
-                } else {
-                    return { 'background-color': 'yellow' };
-                }
-            } else {
-                return { 'background-color': 'palegreen' };
-            }
+             if (cellClassParams.data.Recommended === null ) {
+                return {'background-color': `lightgray`}
+             } else {
+                return {'background-color': 'yellow'}
+             }
         }
        """)
 
     gb = GridOptionsBuilder.from_dataframe(df)
-    gb.configure_column("Category", pinned="left", width=150)
-    gb.configure_column("SubCategory", pinned="left", width=150)
     go = gb.build()
     go['defaultColDef']['cellStyle'] = cellStyle
-    AgGrid(data=df, gridOptions=go, allow_unsafe_jscode=True, key='grid1', editable=True)
+    AgGrid(df, gridOptions=go, allow_unsafe_jscode=True, key="log_file_size", editable=True)
 
 with m2:
     legend_data = [
@@ -110,34 +137,6 @@ with m2:
     go = gb.build()
     AgGrid(df_legend, gridOptions=go, allow_unsafe_jscode=True, key='legend', editable=False)
 
-_,m,_ = st.columns((2,3,2))
-with m:
-    st.markdown(f"<h3 style='text-align: center;'>Log File Size Settings</h3>", unsafe_allow_html=True)
-    msg = ""
-    if selected_guide == "YamatoSecurity" or selected_guide == "Australian Signals Directorate":
-        msg = f"The following table shows the recommended log size based on {selected_guide}."
-    else:
-        msg = f"{selected_guide} does not include any recommended settings regarding log size."
-    st.markdown(f"<p style='text-align: center;'>{msg}</p>", unsafe_allow_html=True)
-    csv_file = data_path.joinpath("WELA-FileSize-Result.csv")
-    df = pd.read_csv(csv_file)
-    columns_to_display = [0, 3, 4]
-    df = df.iloc[:, columns_to_display]
-    cellStyle = JsCode(
-        r"""
-        function(cellClassParams) {
-             if (cellClassParams.data.Recommended === null ) {
-                return {'background-color': `lightgray`}
-             } else {
-                return {'background-color': 'yellow'}
-             }
-        }
-       """)
-
-    gb = GridOptionsBuilder.from_dataframe(df)
-    go = gb.build()
-    go['defaultColDef']['cellStyle'] = cellStyle
-    AgGrid(df, gridOptions=go, allow_unsafe_jscode=True, key="log_file_size", editable=True)
 
 ### Sigma Rule Statistics
 st.markdown("<hr>", unsafe_allow_html=True)
