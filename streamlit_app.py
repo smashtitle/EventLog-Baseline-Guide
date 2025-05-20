@@ -76,7 +76,7 @@ gb.configure_column("SubCategory", pinned="left", width=150)
 go = gb.build()
 go['defaultColDef']['cellStyle'] = cellStyle
 AgGrid(data=df, gridOptions=go, allow_unsafe_jscode=True, key='grid1', editable=True)
-
+st.markdown("<hr>", unsafe_allow_html=True)
 m1,m2 = st.columns((8,3))
 with m1:
     st.markdown(f"<h3 style='text-align: center;'>Log File Size Settings</h3>", unsafe_allow_html=True)
@@ -137,8 +137,8 @@ with m2:
     go = gb.build()
     AgGrid(df_legend, gridOptions=go, allow_unsafe_jscode=True, key='legend', editable=False)
 
-
 ### Sigma Rule Statistics
+st.markdown("<br>", unsafe_allow_html=True)
 st.markdown("<hr>", unsafe_allow_html=True)
 st.markdown("<h3 style='text-align: center;'>Statistics on Usable and Unusable Sigma Rule(hayabusa rule)</h2>", unsafe_allow_html=True)
 
@@ -157,22 +157,6 @@ with m1:
     ## Bar chart
     st.markdown(f"<h4 style='text-align: center;'>Usable Rules Group by Level (Total: {total})</h4>", unsafe_allow_html=True)
     st.altair_chart(create_bar_chart(data, ""), use_container_width=True)
-    st.markdown("<hr>", unsafe_allow_html=True)
-    ## List
-    st.markdown(f"<h4 style='text-align: center;'>Usable Rules List (Total: {total})</h4>", unsafe_allow_html=True)
-    cellStyle_unusable = JsCode(
-        r"""
-        function(cellClassParams) {
-            return {'background-color': 'lightcyan'}
-        }
-        """
-    )
-    gb = GridOptionsBuilder.from_dataframe(df_usable)
-    gb.configure_column("title", pinned="left", width=150)
-    go = gb.build()
-    go['defaultColDef']['cellStyle'] = cellStyle_unusable
-    AgGrid(df_usable, gridOptions=go, allow_unsafe_jscode=True, key='usable_rules', editable=True)
-
 
 with m2:
     df_unusable["level"] = pd.Categorical(df_unusable["level"], categories=level_order, ordered=True)
@@ -184,26 +168,46 @@ with m2:
     ## Bar chart
     st.markdown(f"<h4 style='text-align: center;'>Unusable Rules Group by Level (Total: {total})</h4>", unsafe_allow_html=True)
     st.altair_chart(create_bar_chart(data, ""), use_container_width=True)
-    st.markdown("<hr>", unsafe_allow_html=True)
-    ## List
-    st.markdown(f"<h4 style='text-align: center;'>Unusable Rules List (Total: {total})</h4>", unsafe_allow_html=True)
-    cellStyle_unusable = JsCode(
-        r"""
-        function(cellClassParams) {
-            return {'background-color': 'gold'}
-        }
-        """
-    )
-    gb = GridOptionsBuilder.from_dataframe(df_unusable)
-    gb.configure_column("title", pinned="left", width=150)
-    go = gb.build()
-    go['defaultColDef']['cellStyle'] = cellStyle_unusable
-    AgGrid(df_unusable, gridOptions=go, allow_unsafe_jscode=True, key='un_usable_rules', editable=True)
+
 st.markdown("<br>", unsafe_allow_html=True)
+st.markdown("<hr>", unsafe_allow_html=True)
+## List
+st.markdown(f"<h4 style='text-align: center;'>Usable Rules List (Total: {total})</h4>", unsafe_allow_html=True)
+cellStyle_unusable = JsCode(
+    r"""
+    function(cellClassParams) {
+        return {'background-color': 'lightcyan'}
+    }
+    """
+)
+gb = GridOptionsBuilder.from_dataframe(df_usable)
+gb.configure_column("title", pinned="left", width=150)
+go = gb.build()
+go['defaultColDef']['cellStyle'] = cellStyle_unusable
+AgGrid(df_usable, gridOptions=go, allow_unsafe_jscode=True, key='usable_rules', editable=True)
+st.markdown("<br>", unsafe_allow_html=True)
+st.markdown("<hr>", unsafe_allow_html=True)
+
+## List
+st.markdown(f"<h4 style='text-align: center;'>Unusable Rules List (Total: {total})</h4>", unsafe_allow_html=True)
+cellStyle_unusable = JsCode(
+    r"""
+    function(cellClassParams) {
+        return {'background-color': 'gold'}
+    }
+    """
+)
+gb = GridOptionsBuilder.from_dataframe(df_unusable)
+gb.configure_column("title", pinned="left", width=150)
+go = gb.build()
+go['defaultColDef']['cellStyle'] = cellStyle_unusable
+AgGrid(df_unusable, gridOptions=go, allow_unsafe_jscode=True, key='un_usable_rules', editable=True)
+
+st.markdown("<br>", unsafe_allow_html=True)
+st.markdown("<hr>", unsafe_allow_html=True)
 
 m1, m2, = st.columns((1, 1))
 with m1:
-    st.markdown("<hr>", unsafe_allow_html=True)
     columns_to_display = [0, 1, 2]
     df_enabled = df_audit[(df_audit["CurrentSetting"] == "Enabled") | (df_audit["CurrentSetting"] == "Success") | (df_audit["CurrentSetting"] == "Success and Failure")]
     df_enabled = df_enabled.iloc[:, columns_to_display]
@@ -224,7 +228,6 @@ with m1:
 
 
 with m2:
-    st.markdown("<hr>", unsafe_allow_html=True)
     columns_to_display = [0, 1, 2]
     df_disabled = df_audit[df_audit["CurrentSetting"] == "No Auditing"]
     df_disabled = df_disabled.iloc[:, columns_to_display]
