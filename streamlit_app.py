@@ -182,8 +182,11 @@ cellStyle_unusable = JsCode(
 )
 gb = GridOptionsBuilder.from_dataframe(df_usable)
 gb.configure_column("title", pinned="left", width=150)
+gb.configure_grid_options(enableCellTextSelection=True)
+gb.configure_grid_options(ensureDomOrder=True)
 go = gb.build()
 go['defaultColDef']['cellStyle'] = cellStyle_unusable
+
 AgGrid(df_usable, gridOptions=go, allow_unsafe_jscode=True, key='usable_rules', editable=True)
 st.markdown("<br>", unsafe_allow_html=True)
 st.markdown("<hr>", unsafe_allow_html=True)
@@ -201,6 +204,8 @@ gb = GridOptionsBuilder.from_dataframe(df_unusable)
 gb.configure_column("title", pinned="left", width=150)
 go = gb.build()
 go['defaultColDef']['cellStyle'] = cellStyle_unusable
+gb.configure_grid_options(enableCellTextSelection=True)
+gb.configure_grid_options(ensureDomOrder=True)
 AgGrid(df_unusable, gridOptions=go, allow_unsafe_jscode=True, key='un_usable_rules', editable=True)
 
 st.markdown("<br>", unsafe_allow_html=True)
