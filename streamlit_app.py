@@ -53,7 +53,7 @@ cellStyle = JsCode(
         const defaultSetting = cellClassParams.data.DefaultSetting;
         const recommended = cellClassParams.data.RecommendedSetting;
     
-        if (defaultSetting === "No Auditing") {
+        if (defaultSetting === "No Auditing" || defaultSetting === "Disabled") {
             if (
                 recommended === null ||
                 recommended === undefined ||
