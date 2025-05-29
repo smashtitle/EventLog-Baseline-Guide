@@ -339,6 +339,9 @@ Malware such as Pikabot and Qakbot were seen using similar techniques as well as
 ","70fe889c-0d1e-71e8-542d-a7ca05a0fef6"
 "PUA - Fast Reverse Proxy (FRP) Execution","high","","process_creation","Detects the use of Fast Reverse Proxy. frp is a fast reverse proxy to help you expose a local server behind a NAT or firewall to the Internet.","68ad4ec6-5204-d63f-155f-0ad495ef92b3"
 "Program Executed Using Proxy/Local Command Via SSH.EXE","medium","","process_creation","Detect usage of the ""ssh.exe"" binary as a proxy to launch other programs.","c9a20835-ce7c-8118-9269-64b5a5e8cbb5"
+"Registry Export of Third-Party Credentials","high","","process_creation","Detects the use of reg.exe to export registry paths associated with third-party credentials.
+Credential stealers have been known to use this technique to extract sensitive information from the registry.
+","c870786e-ac3c-7be8-93ba-79705472c787"
 "Arbitrary File Download Via IMEWDBLD.EXE","high","","process_creation","Detects usage of ""IMEWDBLD.exe"" to download arbitrary files","9a2b890c-d67f-9cbf-6350-4365c0828269"
 "New Root Certificate Installed Via Certutil.EXE","medium","","process_creation","Detects execution of ""certutil"" with the ""addstore"" flag in order to install a new certificate on the system.
 Adversaries may install a root certificate on a compromised system to avoid warnings when connecting to adversary controlled web servers.
