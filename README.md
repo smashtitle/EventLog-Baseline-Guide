@@ -61,12 +61,14 @@ cd EventLog-Baseline-Guide
 pip install -r requirements.txt
 streamlit run streamlit_app.py 
 ```
-
-## Reference Links
-Each baseline guide includes direct links to official documentation:
-- Microsoft documentation for official recommendations
-- YamatoSecurity GitHub repository for community guidelines
-- Australian Signals Directorate official resources
+# Other Windows Event Log Audit Settings Related Resources
+* [A Data-Driven Approach to Windows Advanced Audit Policy – What to Enable and Why](https://www.splunk.com/en_us/blog/security/windows-audit-policy-guide.html)
+* [Audit Policy Recommendations](https://learn.microsoft.com/en-us/windows-server/identity/ad-ds/plan/security-best-practices/audit-policy-recommendations)
+* [Configure audit policies for Windows event logs](https://learn.microsoft.com/en-us/defender-for-identity/deploy/configure-windows-event-collection)
+* [EnableWindowsLogSettings](https://github.com/Yamato-Security/EnableWindowsLogSettings)
+* [Windows event logging and forwarding](https://www.cyber.gov.au/resources-business-and-government/maintaining-devices-and-systems/system-hardening-and-administration/system-monitoring/windows-event-logging-and-forwarding)
+* [mdecrevoisier/Windows-auditing-baseline](https://github.com/mdecrevoisier/Windows-auditing-baseline)
+* [palantir/windows-event-forwarding](https://github.com/palantir/windows-event-forwarding/tree/master/group-policy-objects)
 
 ## Contributing
 
