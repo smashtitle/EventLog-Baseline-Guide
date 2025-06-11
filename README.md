@@ -60,19 +60,13 @@ git clone https://github.com/Yamato-Security/EventLog-Baseline-Guide.git
 cd EventLog-Baseline-Guide
 pip install -r requirements.txt
 streamlit run streamlit_app.py 
+```
 
 ## Reference Links
-
 Each baseline guide includes direct links to official documentation:
 - Microsoft documentation for official recommendations
 - YamatoSecurity GitHub repository for community guidelines
 - Australian Signals Directorate official resources
-
-## Notes
-- The application provides real-time analysis of audit configuration impact
-- Color coding helps quickly identify required changes
-- Interactive charts allow for detailed exploration of data
-- All recommendations are based on established security best practices
 
 ## Contributing
 
