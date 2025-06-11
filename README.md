@@ -4,16 +4,6 @@ A comprehensive Streamlit application for comparing and analyzing Windows Event 
 ## Live Demo
 [https://yamato-security-eventlog-baseline-guide-streamlit-app-gwlyjo.streamlit.app/](https://yamato-security-eventlog-baseline-guide-streamlit-app-gwlyjo.streamlit.app/)
 
-## Features
-
-### Baseline Guide Comparison
-Compare audit settings across multiple authoritative sources:
-- **Windows Default**: Microsoft's default configuration
-- **YamatoSecurity**: Community-driven security configurations
-- **Australian Signals Directorate**: Government security recommendations
-- **Microsoft Server**: Server-specific recommendations
-- **Microsoft Client**: Client-specific recommendations
-
 ## Screenshot
 ![Screenshot](img/01.png)
 
@@ -24,6 +14,16 @@ Compare audit settings across multiple authoritative sources:
 ![Screenshot](img/04.png)
 
 ![Screenshot](img/05.png)
+
+## Features
+
+### Baseline Guide Comparison
+Compare audit settings across multiple authoritative sources:
+- **Windows Default**: Microsoft's default configuration
+- **YamatoSecurity**: Community-driven security configurations
+- **Australian Signals Directorate**: Government security recommendations
+- **Microsoft Server**: Server-specific recommendations
+- **Microsoft Client**: Client-specific recommendations
 
 ### Key Metrics
 - **Audit Settings Analysis**: Detailed breakdown of recommended vs default settings
@@ -37,14 +37,6 @@ The application uses an intuitive color-coding system:
 - **🟡 Yellow**: Changes required from default settings
 - **🟢 Pale Green**: Default settings are acceptable
 - **⚪ Light Gray**: No auditing required or no recommendations available
-
-## Usage
-
-1. **Select a Baseline Guide**: Use the dropdown menu to choose your preferred baseline
-2. **Review Audit Settings**: Examine the color-coded recommendations table
-3. **Analyze Log Settings**: Check file size recommendations
-4. **Evaluate Rule Impact**: Review Sigma rule effectiveness statistics
-5. **Compare Results**: Switch between different guides to compare approaches
 
 ## Key Insights
 
