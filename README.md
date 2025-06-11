@@ -1,4 +1,4 @@
-# Event Log Baseline Guide Comparison Tool
+# EventLog-Baseline-Guide
 A comprehensive Streamlit application for comparing and analyzing Windows Event Log audit settings across different security baseline guides.
 
 ## Live Demo
