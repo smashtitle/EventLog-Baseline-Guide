@@ -8,7 +8,7 @@ This tool provides a security-driven approach to configuring Windows event logs 
 Access the application at:
 - [https://yamato-security-eventlog-baseline-guide-streamlit-app-gwlyjo.streamlit.app/](https://yamato-security-eventlog-baseline-guide-streamlit-app-gwlyjo.streamlit.app/)
 
-## 🔨 How to use(local)
+## 🔨 How to use(locally)
 ```
 git clone https://github.com/Yamato-Security/EventLog-Baseline-Guide.git
 cd EventLog-Baseline-Guide
@@ -24,6 +24,17 @@ Compare audit settings across multiple authoritative sources:
 - **Australian Signals Directorate**: Government security recommendations
 - **Microsoft Server**: Server-specific recommendations
 - **Microsoft Client**: Client-specific recommendations
+
+## Screenshot
+![Screenshot](img/01.png)
+
+![Screenshot](img/02.png)
+
+![Screenshot](img/03.png)
+
+![Screenshot](img/04.png)
+
+![Screenshot](img/05.png)
 
 ### Visual Analysis
 - **Interactive Data Grids**: Color-coded tables showing configuration differences
@@ -55,30 +66,6 @@ The application uses an intuitive color-coding system:
 - **Dropdown Selection**: Choose between different baseline guides
 - **Sortable Tables**: Interactive data grids with sorting capabilities
 - **Real-time Updates**: Dynamic content based on selected guide
-
-## Technical Stack
-
-- **Frontend**: Streamlit
-- **Data Processing**: Pandas
-- **Visualization**: Altair, Plotly Express
-- **Interactive Tables**: st-aggrid
-- **Styling**: Custom CSS and JavaScript
-
-## 📁 Data Structure
-
-The application expects the following data files structure:
-```
-data/
-├── Windows_Default/
-│   ├── WELA-Audit-Result.csv
-│   ├── WELA-FileSize-Result.csv
-│   ├── UsableRules.csv
-│   └── UnusableRules.csv
-├── YamatoSecurity/
-├── Australian_Signals_Directorate/
-├── Microsoft_Server/
-└── Microsoft_Client/
-```
 
 ## Usage
 
