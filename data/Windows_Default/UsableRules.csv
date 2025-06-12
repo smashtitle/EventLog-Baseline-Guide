@@ -21,6 +21,8 @@ Unfortunately, that is about the only instance of CVEs being written to this log
 ","11635209-eef1-b93a-98bf-33b80e5065a1"
 "MSSQL Disable Audit Settings","high","application","","Detects when an attacker calls the ""ALTER SERVER AUDIT"" or ""DROP SERVER AUDIT"" transaction in order to delete or disable audit logs on the server","e485c12e-8840-1b24-61f7-697e480d63b1"
 "MSSQL Add Account To Sysadmin Role","high","application","","Detects when an attacker tries to backdoor the MSSQL server by adding a backdoor account to the sysadmin fixed server role","d17d99ad-18e9-67e1-6163-054f210fee16"
+"MSSQL Destructive Query","medium","application","","Detects the invocation of MS SQL transactions that are destructive towards table or database data, such as ""DROP TABLE"" or ""DROP DATABASE"".
+","ca403782-4ab3-76a6-b804-069219ccbd7f"
 "MSSQL Server Failed Logon","low","application","","Detects failed logon attempts from clients to MSSQL server.","03e217c6-de25-3afa-3833-6c534a6576f0"
 "Ntdsutil Abuse","medium","application","","Detects potential abuse of ntdsutil to dump ntds.dit database","b8d0d560-906d-670f-cd10-32ed9179f21a"
 "Dump Ntds.dit To Suspicious Location","medium","application","","Detects potential abuse of ntdsutil to dump ntds.dit database to a suspicious location","a050e701-373d-fc52-c345-8fbf933e1b82"
