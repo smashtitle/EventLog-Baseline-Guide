@@ -1616,6 +1616,10 @@ Attackers might leverage this in order to conduct data destruction or data encry
 Use this rule to hunt for potential anomalies initiating from PowerShell scripts and commands.
 ","56ff2d1a-cadd-2622-f049-458f96d44a39"
 "Tunneling Tool Execution","medium","","process_creation","Detects the execution of well known tools that can be abused for data exfiltration and tunneling.","613ea969-381a-6723-e44f-9202a3e64638"
+"Process Execution From WebDAV Share","low","","process_creation","Detects execution of processes with image paths starting with WebDAV shares (\\), which might indicate malicious file execution from remote web shares.
+Execution of processes from WebDAV shares can be a sign of lateral movement or exploitation attempts, especially if the process is not a known legitimate application.
+Exploitation Attempt of vulnerabilities like CVE-2025-33053 also involves executing processes from WebDAV paths.
+","b84be625-d670-8b06-9f7d-13ccfe3a5785"
 "Unusually Long PowerShell CommandLine","low","","process_creation","Detects unusually long PowerShell command lines with a length of 1000 characters or more","9d361072-2d35-e275-87b6-4915aa2beab8"
 "WSF/JSE/JS/VBA/VBE File Execution Via Cscript/Wscript","medium","","process_creation","Detects script file execution (.js, .jse, .vba, .vbe, .vbs, .wsf) by Wscript/Cscript","5742c4d7-6bb8-d4c7-1abf-eedde7c178df"
 "Suspicious Tasklist Discovery Command","informational","","process_creation","Adversaries may attempt to get information about running processes on a system. Information obtained could be used to gain an understanding of common software/applications running on systems within the network","a8683f51-05f0-cb77-d513-48b731911be3"
@@ -1766,6 +1770,13 @@ As reported by Morphisec, part of the attack chain, threat actors used PowerShel
 CVE-2025-31161, where attackers can achieve RCE through crafted HTTP requests.
 The detection focuses on commonly abused Windows executables (like powershell.exe, cmd.exe etc.) that attackers typically use post-exploitation to execute malicious commands.
 ","c8db6dc8-96e3-1974-3921-3a7fc78993d4"
+"Potential Exploitation of RCE Vulnerability CVE-2025-33053","high","","process_creation","Detects potential exploitation of remote code execution vulnerability CVE-2025-33053
+which involves unauthorized code execution via WebDAV through external control of file names or paths.
+The exploit abuses legitimate utilities like iediagcmd.exe or CustomShellHost.exe  by manipulating
+their working directories to point to attacker-controlled WebDAV servers, causing them to execute
+malicious executables (like route.exe) from the WebDAV path instead of legitimate system binaries
+through Process.Start() search order manipulation.
+","5cceaffb-6b96-605b-5c7e-58a2f125f151"
 "Small Sieve Malware CommandLine Indicator","high","","process_creation","Detects specific command line argument being passed to a binary as seen being used by the malware Small Sieve.","d0813182-98c0-431d-4f35-12d9dc087b3b"
 "Potential BlackByte Ransomware Activity","high","","process_creation","Detects command line patterns used by BlackByte ransomware in different operations","de11bbb4-9429-4ee9-9039-d71a174c512e"
 "Potential Goofy Guineapig Backdoor Activity","high","","process_creation","Detects a specific broken command that was used by Goofy-Guineapig as described by the NCSC report.","0704ac61-5014-80cc-4899-419448a02edf"
