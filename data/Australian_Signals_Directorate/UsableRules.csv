@@ -971,6 +971,7 @@ Adversaries may attempt to make an executable or file difficult to discover or a
 "Suspicious CodePage Switch Via CHCP","medium","","process_creation","Detects a code page switch in command line or batch scripts to a rare language","cb1cfe0e-5561-53fd-9c94-ab43c3826cf5"
 "Suspicious Desktopimgdownldr Command","high","","process_creation","Detects a suspicious Microsoft desktopimgdownldr execution with parameters used to download files from the Internet","6c75d760-680d-9c24-79e3-123491563466"
 "Suspicious Spool Service Child Process","high","","process_creation","Detects suspicious print spool service (spoolsv.exe) child processes.","9acd90a3-770d-023f-0b71-92c461984dcc"
+"System Information Discovery via Registry Queries","low","","process_creation","Detects attempts to query system information directly from the Windows Registry.","62c2be2f-ba0e-142b-7bf8-cf4b2b8a6bf5"
 "PUA - Process Hacker Execution","medium","","process_creation","Detects the execution of Process Hacker based on binary metadata information (Image, Hash, Imphash, etc).
 Process Hacker is a tool to view and manipulate processes, kernel options and other low level options.
 Threat actors abused older vulnerable versions to manipulate system processes.
@@ -1914,6 +1915,9 @@ Attackers often time use this technique to extract specific information they req
 "Remote Access Tool - ScreenConnect Server Web Shell Execution","high","","process_creation","Detects potential web shell execution from the ScreenConnect server process.","e8e1c7ac-50e7-03e1-c3d6-e1192efc4260"
 "Control Panel Items","high","","process_creation","Detects the malicious use of a control panel item","412f66af-4b64-0d69-8b91-9fa5161724cd"
 "Verclsid.exe Runs COM Object","medium","","process_creation","Detects when verclsid.exe is used to run COM object via GUID","f95fb96e-dacc-23fa-9a80-f509e7973c9f"
+"HKTL - SharpSuccessor Privilege Escalation Tool Execution","high","","process_creation","Detects the execution of SharpSuccessor, a tool used to exploit the BadSuccessor attack for privilege escalation in WinServer 2025 Active Directory environments.
+Successful usage of this tool can let the attackers gain the domain admin privileges by exploiting the BadSuccessor vulnerability.
+","b0559eb5-33e0-09c4-c9bb-88007b5981ca"
 "New User Created Via Net.EXE","medium","","process_creation","Identifies the creation of local users via the net.exe command.","6770bbc3-76b1-d22f-6192-d180542dc2a2"
 "Execution Of Non-Existing File","high","","process_creation","Checks whether the image specified in a process creation event is not a full, absolute path (caused by process ghosting or other unorthodox methods to start a process)","5385a182-a453-d329-5d89-d768e2b73e28"
 "Potential Renamed Rundll32 Execution","high","","process_creation","Detects when 'DllRegisterServer' is called in the commandline and the image is not rundll32. This could mean that the 'rundll32' utility has been renamed in order to avoid detection","04f5d1ee-1b2f-dc73-a3fd-a7277cb56195"
@@ -2160,6 +2164,10 @@ Attackers might leverage this in order to conduct data destruction or data encry
 Use this rule to hunt for potential anomalies initiating from PowerShell scripts and commands.
 ","56ff2d1a-cadd-2622-f049-458f96d44a39"
 "Tunneling Tool Execution","medium","","process_creation","Detects the execution of well known tools that can be abused for data exfiltration and tunneling.","613ea969-381a-6723-e44f-9202a3e64638"
+"Process Execution From WebDAV Share","low","","process_creation","Detects execution of processes with image paths starting with WebDAV shares (\\), which might indicate malicious file execution from remote web shares.
+Execution of processes from WebDAV shares can be a sign of lateral movement or exploitation attempts, especially if the process is not a known legitimate application.
+Exploitation Attempt of vulnerabilities like CVE-2025-33053 also involves executing processes from WebDAV paths.
+","b84be625-d670-8b06-9f7d-13ccfe3a5785"
 "Unusually Long PowerShell CommandLine","low","","process_creation","Detects unusually long PowerShell command lines with a length of 1000 characters or more","9d361072-2d35-e275-87b6-4915aa2beab8"
 "WSF/JSE/JS/VBA/VBE File Execution Via Cscript/Wscript","medium","","process_creation","Detects script file execution (.js, .jse, .vba, .vbe, .vbs, .wsf) by Wscript/Cscript","5742c4d7-6bb8-d4c7-1abf-eedde7c178df"
 "Suspicious Tasklist Discovery Command","informational","","process_creation","Adversaries may attempt to get information about running processes on a system. Information obtained could be used to gain an understanding of common software/applications running on systems within the network","a8683f51-05f0-cb77-d513-48b731911be3"
@@ -2310,6 +2318,13 @@ As reported by Morphisec, part of the attack chain, threat actors used PowerShel
 CVE-2025-31161, where attackers can achieve RCE through crafted HTTP requests.
 The detection focuses on commonly abused Windows executables (like powershell.exe, cmd.exe etc.) that attackers typically use post-exploitation to execute malicious commands.
 ","c8db6dc8-96e3-1974-3921-3a7fc78993d4"
+"Potential Exploitation of RCE Vulnerability CVE-2025-33053","high","","process_creation","Detects potential exploitation of remote code execution vulnerability CVE-2025-33053
+which involves unauthorized code execution via WebDAV through external control of file names or paths.
+The exploit abuses legitimate utilities like iediagcmd.exe or CustomShellHost.exe  by manipulating
+their working directories to point to attacker-controlled WebDAV servers, causing them to execute
+malicious executables (like route.exe) from the WebDAV path instead of legitimate system binaries
+through Process.Start() search order manipulation.
+","5cceaffb-6b96-605b-5c7e-58a2f125f151"
 "Small Sieve Malware CommandLine Indicator","high","","process_creation","Detects specific command line argument being passed to a binary as seen being used by the malware Small Sieve.","d0813182-98c0-431d-4f35-12d9dc087b3b"
 "Potential BlackByte Ransomware Activity","high","","process_creation","Detects command line patterns used by BlackByte ransomware in different operations","de11bbb4-9429-4ee9-9039-d71a174c512e"
 "Potential Goofy Guineapig Backdoor Activity","high","","process_creation","Detects a specific broken command that was used by Goofy-Guineapig as described by the NCSC report.","0704ac61-5014-80cc-4899-419448a02edf"
