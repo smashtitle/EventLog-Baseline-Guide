@@ -1189,6 +1189,11 @@ Malware such as Pikabot and Qakbot were seen using similar techniques as well as
 "System Network Connections Discovery Via Net.EXE","low","","process_creation","Adversaries may attempt to get a listing of network connections to or from the compromised system they are currently accessing or from remote systems by querying for information over the network.","5e078b34-047a-505f-5c16-344bc38300ff"
 "Assembly Loading Via CL_LoadAssembly.ps1","medium","","process_creation","Detects calls to ""LoadAssemblyFromPath"" or ""LoadAssemblyFromNS"" that are part of the ""CL_LoadAssembly.ps1"" script. This can be abused to load different assemblies and bypass App locker controls.","a14e43f1-2c46-bf33-4ae5-b72dec4e8f0f"
 "Suspicious Curl.EXE Download","high","","process_creation","Detects a suspicious curl process start on Windows and outputs the requested document to a local file","e09795ef-2d7f-3f65-8286-c3267b89622e"
+"PowerShell MSI Install via WindowsInstaller COM From Remote Location","medium","","process_creation","Detects the execution of PowerShell commands that attempt to install MSI packages via the
+Windows Installer COM object (`WindowsInstaller.Installer`) hosted remotely.
+This could be indication of malicious software deployment or lateral movement attempts using Windows Installer functionality.
+And the usage of WindowsInstaller COM object rather than msiexec could be an attempt to bypass the detection.
+","67cbe37e-314f-cce4-2882-0cb45993a3c5"
 "Suspicious File Downloaded From Direct IP Via Certutil.EXE","high","","process_creation","Detects the execution of certutil with certain flags that allow the utility to download files from direct IPs.","e0c7a46a-e1c5-f3fd-6202-5fcf88ffeb16"
 "Suspicious Process By Web Server Process","high","","process_creation","Detects potentially suspicious processes being spawned by a web server process which could be the result of a successfully placed web shell or exploitation
 ","5bdc7357-a9e6-95bc-a7cd-c6e0022b3299"
