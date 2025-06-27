@@ -1026,6 +1026,10 @@ Adversaries can drop their own renamed DLL and execute it via DeviceEnroller.exe
 ","7f54442b-227f-edd9-29d8-f6dc27ca512e"
 "Remote Code Execute via Winrm.vbs","medium","","process_creation","Detects an attempt to execute code or create service on remote host via winrm.vbs.","3c178fa3-3914-652f-7007-f1d6f385c2ed"
 "Allow Service Access Using Security Descriptor Tampering Via Sc.EXE","high","","process_creation","Detects suspicious DACL modifications to allow access to a service from a suspicious trustee. This can be used to override access restrictions set by previous ACLs.","a6b2ba82-448c-971d-4112-1464c1588d84"
+"Remote Access Tool - Potential MeshAgent Execution - Windows","medium","","process_creation","Detects potential execution of MeshAgent which is a tool used for remote access.
+Historical data shows that threat actors rename MeshAgent binary to evade detection.
+Matching command lines with the '--meshServiceName' argument can indicate that the MeshAgent is being used for remote access.
+","8137d225-9af4-eac6-7709-6bcb96a183f2"
 "User Added To Highly Privileged Group","high","","process_creation","Detects addition of users to highly privileged groups via ""Net"" or ""Add-LocalGroupMember"".","315b342a-decc-2f38-398f-41e5c8fdb4ed"
 "Suspicious Diantz Alternate Data Stream Execution","medium","","process_creation","Compress target file into a cab file stored in the Alternate Data Stream (ADS) of the target file.","555c9e0e-bd1c-accd-f824-11a77ca76819"
 "Findstr Launching .lnk File","medium","","process_creation","Detects usage of findstr to identify and execute a lnk file as seen within the HHS redirect attack","091f16dc-7243-8589-626d-3f1fa16f326b"
@@ -1629,6 +1633,10 @@ Attacker might abuse this in order to compile JScript files on the fly and bypas
 "Suspicious Process Created Via Wmic.EXE","high","","process_creation","Detects WMIC executing ""process call create"" with suspicious calls to processes such as ""rundll32"", ""regsrv32"", etc.","3a1e9d54-cfc2-0052-abc5-2271eee0dd8c"
 "DLL Loaded via CertOC.EXE","medium","","process_creation","Detects when a user installs certificates by using CertOC.exe to loads the target DLL file.","471f9aca-34da-a143-18bc-d54d121778dd"
 "Suspicious GUP Usage","high","","process_creation","Detects execution of the Notepad++ updater in a suspicious directory, which is often used in DLL side-loading attacks","cec3aeb1-8e95-5fa2-4566-9463115e48b2"
+"Remote Access Tool - Renamed MeshAgent Execution - Windows","high","","process_creation","Detects the execution of a renamed instance of the Remote Monitoring and Management (RMM) tool, MeshAgent.
+RMM tools such as MeshAgent are commonly utilized by IT administrators for legitimate remote support and system management.
+However, malicious actors may exploit these tools by renaming them to bypass detection mechanisms, enabling unauthorized access and control over compromised systems.
+","3ab572a4-6b9c-6004-a772-cf0ce1400109"
 "Suspicious LNK Command-Line Padding with Whitespace Characters","high","","process_creation","Detects exploitation of LNK file command-line length discrepancy, where attackers hide malicious commands beyond the 260-character UI limit while the actual command-line argument field supports 4096 characters using whitespace padding (e.g., 0x20, 0x09-0x0D).
 Adversaries insert non-printable whitespace characters (e.g., Line Feed \x0A, Carriage Return \x0D) to pad the visible section of the LNK file, pushing malicious commands past the UI-visible boundary.
 The hidden payload, executed at runtime but invisible in Windows Explorer properties, enables stealthy execution and evasion—commonly used for social engineering attacks.
@@ -1731,6 +1739,11 @@ Malware such as Pikabot and Qakbot were seen using similar techniques as well as
 "System Network Connections Discovery Via Net.EXE","low","","process_creation","Adversaries may attempt to get a listing of network connections to or from the compromised system they are currently accessing or from remote systems by querying for information over the network.","5e078b34-047a-505f-5c16-344bc38300ff"
 "Assembly Loading Via CL_LoadAssembly.ps1","medium","","process_creation","Detects calls to ""LoadAssemblyFromPath"" or ""LoadAssemblyFromNS"" that are part of the ""CL_LoadAssembly.ps1"" script. This can be abused to load different assemblies and bypass App locker controls.","a14e43f1-2c46-bf33-4ae5-b72dec4e8f0f"
 "Suspicious Curl.EXE Download","high","","process_creation","Detects a suspicious curl process start on Windows and outputs the requested document to a local file","e09795ef-2d7f-3f65-8286-c3267b89622e"
+"PowerShell MSI Install via WindowsInstaller COM From Remote Location","medium","","process_creation","Detects the execution of PowerShell commands that attempt to install MSI packages via the
+Windows Installer COM object (`WindowsInstaller.Installer`) hosted remotely.
+This could be indication of malicious software deployment or lateral movement attempts using Windows Installer functionality.
+And the usage of WindowsInstaller COM object rather than msiexec could be an attempt to bypass the detection.
+","67cbe37e-314f-cce4-2882-0cb45993a3c5"
 "Suspicious File Downloaded From Direct IP Via Certutil.EXE","high","","process_creation","Detects the execution of certutil with certain flags that allow the utility to download files from direct IPs.","e0c7a46a-e1c5-f3fd-6202-5fcf88ffeb16"
 "Suspicious Process By Web Server Process","high","","process_creation","Detects potentially suspicious processes being spawned by a web server process which could be the result of a successfully placed web shell or exploitation
 ","5bdc7357-a9e6-95bc-a7cd-c6e0022b3299"
