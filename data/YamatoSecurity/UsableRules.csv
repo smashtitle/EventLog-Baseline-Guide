@@ -723,6 +723,10 @@ The tool allows a user to provide a DLL that can contain a custom ""verification
 "Wab Execution From Non Default Location","high","","process_creation","Detects execution of wab.exe (Windows Contacts) and Wabmig.exe (Microsoft Address Book Import Tool) from non default locations as seen with bumblebee activity","a7598bcd-02ee-2b0a-092f-27aeb1e15e94"
 "Suspicious RASdial Activity","medium","","process_creation","Detects suspicious process related to rasdial.exe","60b34e33-95fe-6beb-2917-eb4309e6dcd8"
 "Suspicious Extrac32 Execution","medium","","process_creation","Download or Copy file with Extrac32","1a6983b5-f09c-767b-3ebe-349e7cde3c8e"
+"FileFix - Suspicious Child Process from Browser File Upload Abuse","high","","process_creation","Detects potentially suspicious subprocesses such as LOLBINs spawned by web browsers. This activity could be associated with the ""FileFix"" social engineering technique,
+where users are tricked into launching the file explorer via a browser-based phishing page and pasting malicious commands into the address bar.
+The technique abuses clipboard manipulation and disguises command execution as benign file path access, resulting in covert execution of system utilities.
+","0b4162ed-2534-2656-6d4a-8d2ad218617b"
 "PsExec/PAExec Escalation to LOCAL SYSTEM","high","","process_creation","Detects suspicious commandline flags used by PsExec and PAExec to escalate a command line to LOCAL_SYSTEM rights","24194c4a-9136-8ccc-cb24-c32ee6a83d2f"
 "HackTool - SharpWSUS/WSUSpendu Execution","high","","process_creation","Detects the execution of SharpWSUS or WSUSpendu, utilities that allow for lateral movement through WSUS.
 Windows Server Update Services (WSUS) is a critical component of Windows systems and is frequently configured in a way that allows an attacker to circumvent internal networking limitations.
