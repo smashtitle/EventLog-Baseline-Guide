@@ -2344,6 +2344,10 @@ their working directories to point to attacker-controlled WebDAV servers, causin
 malicious executables (like route.exe) from the WebDAV path instead of legitimate system binaries
 through Process.Start() search order manipulation.
 ","5cceaffb-6b96-605b-5c7e-58a2f125f151"
+"Potential Notepad++ CVE-2025-49144 Exploitation","high","","process_creation","Detects potential exploitation of CVE-2025-49144, a local privilege escalation vulnerability in Notepad++ installers (v8.8.1 and prior) where the installer calls regsvr32.exe without specifying the full path.
+This allows an attacker to execute arbitrary code with elevated privileges by placing a malicious regsvr32.exe alongside this Legitimate Notepad++ installer.
+The vulnerability is triggered when the installer attempts to register the NppShell.dll file, which is a component of Notepad++.
+","1df6028e-e6fa-9d43-0ec9-a502e12d85dd"
 "Small Sieve Malware CommandLine Indicator","high","","process_creation","Detects specific command line argument being passed to a binary as seen being used by the malware Small Sieve.","d0813182-98c0-431d-4f35-12d9dc087b3b"
 "Potential BlackByte Ransomware Activity","high","","process_creation","Detects command line patterns used by BlackByte ransomware in different operations","de11bbb4-9429-4ee9-9039-d71a174c512e"
 "Potential Goofy Guineapig Backdoor Activity","high","","process_creation","Detects a specific broken command that was used by Goofy-Guineapig as described by the NCSC report.","0704ac61-5014-80cc-4899-419448a02edf"
