@@ -2,6 +2,7 @@ wevtutil sl Security /ms:2147483648
 wevtutil sl System /ms:67108864
 wevtutil sl Application /ms:67108864
 wevtutil set-log "Microsoft-Windows-PowerShell/Operational" /enabled:true
+wevtutil set-log "Microsoft-Windows-RPC-Events/Operational" /enabled:true
 
 :: Enable PowerShell Module logging
 reg add HKLM\SOFTWARE\Policies\Microsoft\Windows\PowerShell\ModuleLogging /v EnableModuleLogging /t REG_DWORD /d 1 /f
