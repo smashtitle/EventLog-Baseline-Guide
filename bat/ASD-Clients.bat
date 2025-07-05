@@ -16,6 +16,7 @@ wevtutil sl "Microsoft-Windows-PrintService/Admin" /enabled:true /retention:fals
 wevtutil sl "Microsoft-Windows-CodeIntegrity/Operational" /enabled:true /retention:false /maxsize:268435456
 wevtutil sl "Microsoft-Windows-GroupPolicy/Operational" /enabled:true /retention:false /maxsize:268435456
 wevtutil sl "Microsoft-Windows-WinRM/Operational" /enabled:true /retention:false  /maxsize:268435456
+wevtutil sl "Microsoft-Windows-DriveFrameworks-UserMode/Operational" /enabled:true /retention:false  /maxsize:268435456
 wevtutil sl "Microsoft-Windows-TerminalServices-RemoteConnectionManager/Operational" /enabled:true /retention:false /maxsize:268435456
 wevtutil sl "Microsoft-Windows-TerminalServices-LocalSessionManager/Operational" /enabled:true /retention:false /maxsize:268435456
 wevtutil sl "Microsoft-Windows-Diagnosis-Scripted/Operational" /enabled:true /retention:false /maxsize:268435456
