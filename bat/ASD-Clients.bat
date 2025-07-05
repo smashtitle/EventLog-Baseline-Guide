@@ -1,8 +1,20 @@
-wevtutil sl Security /ms:2147483648
-wevtutil sl System /ms:67108864
-wevtutil sl Application /ms:67108864
-wevtutil set-log "Microsoft-Windows-PowerShell/Operational" /enabled:true
-wevtutil set-log "Microsoft-Windows-RPC-Events/Operational" /enabled:true
+wevtutil sl Security /ms:8589934592
+wevtutil sl System /ms:268435456
+wevtutil sl Application /ms:268435456
+wevtutil sl "Microsoft-Windows-PowerShell/Operational" /enabled:true /retention:false /maxsize:268435456
+wevtutil sl "Microsoft-Windows-RPC-Events/Operational" /enabled:true /retention:false /maxsize:268435456
+wevtutil sl "Microsoft-Windows-WMI-Activity/Operational" /enabled:true /retention:false /maxsize:268435456
+wevtutil sl "Microsoft-Windows-TaskScheduler/Operational" /enabled:true /retention:false /maxsize:268435456
+wevtutil sl "Microsoft-Windows-SMBServer/Operational" /enabled:true /retention:false /maxsize:268435456
+wevtutil sl "Microsoft-Windows-SMBServer/Security" /enabled:true /retention:false /maxsize:268435456
+wevtutil sl "Microsoft-Windows-SMBClient/Security" /enabled:true /retention:false /maxsize:268435456
+wevtutil sl "Microsoft-Windows-LSA/Operational" /enabled:true /retention:false /maxsize:268435456
+wevtutil sl "Microsoft-Windows-CAPI2/Operational" /enabled:true /retention:false /maxsize:268435456
+wevtutil sl "Microsoft-Windows-CodeIntegrity/Operational" /enabled:true /retention:false /maxsize:268435456
+wevtutil sl "Microsoft-Windows-GroupPolicy/Operational" /enabled:true /retention:false /maxsize:268435456
+wevtutil sl "Microsoft-Windows-WinRM/Operational" /enabled:true /retention:false  /maxsize:268435456
+wevtutil sl "Microsoft-Windows-TerminalServices-RemoteConnectionManager/Operational" /enabled:true /retention:false /maxsize:268435456
+wevtutil sl "Microsoft-Windows-TerminalServices-LocalSessionManager/Operational" /enabled:true /retention:false /maxsize:268435456
 
 :: Enable PowerShell Module logging
 reg add HKLM\SOFTWARE\Policies\Microsoft\Windows\PowerShell\ModuleLogging /v EnableModuleLogging /t REG_DWORD /d 1 /f
@@ -10,6 +22,8 @@ reg add HKLM\SOFTWARE\Policies\Microsoft\Windows\PowerShell\ModuleLogging\Module
 
 :: Enable PowerShell Script Block logging
 reg add HKLM\SOFTWARE\Policies\Microsoft\Windows\PowerShell\ScriptBlockLogging /v EnableScriptBlockLogging /t REG_DWORD /d 1 /f
+
+:: E
 
 ::
 :: Configure Security log
@@ -31,7 +45,7 @@ auditpol /set /subcategory:{0CCE923A-69AE-11D9-BED3-505054503030} /success:enabl
 :::: Security Group Management
 auditpol /set /subcategory:{0CCE9237-69AE-11D9-BED3-505054503030} /success:enable /failure:disable
 :::: User Account Management
-auditpol /set /subcategory:{0CCE9235-69AE-11D9-BED3-505054503030} /success:enable /failure:disable
+auditpol /set /subcategory:{0CCE9235-69AE-11D9-BED3-505054503030} /success:enable /failure:enable
 
 :: Detailed Tracking
 :::: Plug and Play
