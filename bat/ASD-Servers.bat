@@ -9,10 +9,12 @@ wevtutil sl "Microsoft-Windows-SMBServer/Operational" /enabled:true /retention:f
 wevtutil sl "Microsoft-Windows-SMBServer/Security" /enabled:true /retention:false /maxsize:268435456
 wevtutil sl "Microsoft-Windows-SMBClient/Security" /enabled:true /retention:false /maxsize:268435456
 wevtutil sl "Microsoft-Windows-LSA/Operational" /enabled:true /retention:false /maxsize:268435456
+wevtutil sl "Microsoft-Windows-CAPI2/Operational" /enabled:true /retention:false /maxsize:268435456
+wevtutil sl "Microsoft-Windows-CodeIntegrity/Operational" /enabled:true /retention:false /maxsize:268435456
+wevtutil sl "Microsoft-Windows-GroupPolicy/Operational" /enabled:true /retention:false /maxsize:268435456
+wevtutil sl "Microsoft-Windows-WinRM/Operational" /enabled:true /retention:false  /maxsize:268435456
 wevtutil sl "Microsoft-Windows-TerminalServices-RemoteConnectionManager/Operational" /enabled:true /retention:false /maxsize:268435456
-
-
-
+wevtutil sl "Microsoft-Windows-TerminalServices-LocalSessionManager/Operational" /enabled:true /retention:false /maxsize:268435456
 
 :: Enable PowerShell Module logging
 reg add HKLM\SOFTWARE\Policies\Microsoft\Windows\PowerShell\ModuleLogging /v EnableModuleLogging /t REG_DWORD /d 1 /f
