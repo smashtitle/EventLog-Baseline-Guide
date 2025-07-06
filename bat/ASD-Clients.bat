@@ -20,6 +20,7 @@ wevtutil sl "Microsoft-Windows-DriveFrameworks-UserMode/Operational" /enabled:tr
 wevtutil sl "Microsoft-Windows-TerminalServices-RemoteConnectionManager/Operational" /enabled:true /retention:false /maxsize:268435456
 wevtutil sl "Microsoft-Windows-TerminalServices-LocalSessionManager/Operational" /enabled:true /retention:false /maxsize:268435456
 wevtutil sl "Microsoft-Windows-Diagnosis-Scripted/Operational" /enabled:true /retention:false /maxsize:268435456
+wevtutil sl "Microsoft-Windows-Sysmon/Operational" /enabled:true /retention:false /maxsize:268435456
 
 :: Enable PowerShell Module logging
 reg add HKLM\SOFTWARE\Policies\Microsoft\Windows\PowerShell\ModuleLogging /v EnableModuleLogging /t REG_DWORD /d 1 /f
